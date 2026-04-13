@@ -114,3 +114,74 @@ git config user.email
 - [https://www.gitkraken.com/](https://www.gitkraken.com/)
 - register, preferably with your github account as the option, but not technically necessary
 
+# Basics of Git: Adding & Committing
+
+## What is a Git Repo?
+
+- repository, aka repo, is a workspace which tracks and manages files within a folder
+
+## First Commands `git init` & `git status`
+
+- `git status` is a command to report the status in current repo
+- `git init` initializes a new repo wherever you are in your command line
+    - one-time per project, yo
+    - a `.git` directory added with subs for objects, red/heads, and ref/tags
+
+### The Mysterious `.git` Folder
+
+- remember `ls -a` shows hidden files, too, when you wanna explore and goof in the `.git` dir
+
+### Common Early Mistakes
+
+- when you initialize a git repo, it's one directory
+- git will watch anything happening in that directory, including _any nested directories_
+    - it's top-down tracked by git
+- **do not** initialize a git repo inside another existing repo
+    - not end of the world, but it will go wrong at some point
+- always just check with `git status` first and confirm you're not in a git repo already before using `git init`
+
+## The Committing Workflow Overview
+
+- a git commit is basically a "checkpoint" or a "snapshot" of a moment in time
+- not the same as saving a file, think of it as something "on top of" saving a file
+    - we can group saved changes together to a single commit rather than each "saving" of each file
+- TL;DR Workflow
+    - Work on Stuff
+    - Add Changes
+    - Commit
+- working directory > git add > staging area > git commit > repo
+
+### The `git add` Command
+
+- allows us to separate specific changes we made to group them together
+    - this places them from our working dir into staging
+        - (commit moves them to the local repo)
+- location: working directory
+    - the place we're actually working on our project
+- location: repository
+    - the actual `.git` folder itself
+        - the `git commit` adds commits to this folder, this is what is updated during the workflow
+- location: staging area (the intermediate area)
+    - where we add our changes to before we make a commit
+- `git add file1 file2 ...`
+    - separate files by spaces, globbing patterns do work here e.g. `git add src/types/*.ts`
+- `git add .`
+    - stages all changes at once
+
+### The `git commit` Command
+
+- the command we use to actually make a commit to whatever changes we have staged
+- commit expects us to include a message that describes or summarizes the changes in that given commit snapshot
+- `git commit` simple as
+    - it will use default editor e.g. VIM to write a message
+- `git commit -m "my message"` lets us just add the message at the same time
+- working tree clean means everything we've done in our main working folder and git knows about is in sync
+
+### The `git log` Command
+
+- doesn't do anything really, just retreives info for us
+- retrieves log of commits for our local repo
+- the commit hash reported, good reference point
+- untracked files and modified files
+    - modified means git has been tracking that file already
+    - untracked means its a new file not been comitted before
