@@ -4,7 +4,7 @@
 
 ## What Exactly is Git?
 
-- a Version Control System, commonly shortened to "VCS"
+- a Version Control System, commonly shortened to **"VCS"**
     - software that tracks and manages changes to a set of files over time
     - revisit older versions of files, compare changes between versions, undo changes, and etc.
 - git is just one of many different vcs options out there
@@ -47,3 +47,70 @@
     - need internet and an account
     - takes your local repo and hosts it online for others to see or collab
     - aka the connecting tissue of group work
+
+# Installtion and Setup
+
+## Terminal vs. GUIs
+
+- git is primarily a terminal tool
+    - run various git commands in a unix shell of some kind
+    - not user friendly, but the core of how git works
+    - **pros**
+        - all documentation and resources online refer to the command line
+        - way faster if you're comfortable
+        - advanced features only doable with commands
+        - commands are univeral across all machines
+    - **cons**
+        - not beginner friendly at all
+        - even for experienced folks, the text-based output can be a difficult experience :(
+- GUIs have grown in popularity to visualize interaction with git
+    - GitHub Desktop, GitKraken, SourceTree, and many more
+    - **pros**
+        - way lower barrier of entry for newbies
+        - friendlier to use when it works
+        - some peeps gotta have a visual experience
+    - **cons**
+        - a lot of "magic" involved behind the scenes which obfuscates git core
+        - leads to dependance on a particular software
+        - if things go really fuckin' sideways you can't really fix without the command line
+        - GUIs vary a lot between each so "skills" don't translate easily
+
+## Windows Install
+
+- a tad more complicated than mac install
+- designed to run in a unix-based interface
+- windows don't come with a unix-based prompt by default
+    - uses command prompt instead ugh
+- **git bash** is typically the solution
+    - emulates a window's bash experience with git stuff built in
+- can just do the git installer for windows with _git-scm.com_
+- output a test with `git --version`
+
+## Mac Install
+
+- some come with git already installed
+- want to use version **2.23.x** and above
+- installer from _git-scm.com_ with binary installer
+
+## Configuring Git Name & Email
+
+- use a name people that know you by
+- use the email linked to your github account
+- can be re-configured whenever you want :D
+
+```bash
+# configure it
+git config --global user.name "blah"
+git config --global user.email "blah@blah.com"
+
+# test it
+git config user.name
+git config user.email
+```
+
+## GitKraken
+
+- free tier is solid, paid tier is not needed
+- [https://www.gitkraken.com/](https://www.gitkraken.com/)
+- register, preferably with your github account as the option, but not technically necessary
+
