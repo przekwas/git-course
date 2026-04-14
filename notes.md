@@ -185,3 +185,67 @@ git config user.email
 - untracked files and modified files
     - modified means git has been tracking that file already
     - untracked means its a new file not been comitted before
+
+# Commits in Detail
+
+## Atomic Commits
+
+- keeping each commit focused on a single thing
+- makes it easier to undo changes or rollback stuff later on in the project lifespan
+- makes code and project easier to review, too
+
+## Commit Messages
+
+- git docs specifically advocate for describing changes in imperative mood
+    - "make fizz do buzz" instead of "this patch makes fizz do buzz" or "i changed fizz to do buzz"
+    - kinda' like giving orders to the codebase
+- present tense imperative or past tense imperative are two main schools of thougt
+    - obviously follow what your team/company/org are doing
+- extra links on topic:
+    - https://medium.com/@corrodedlotus/which-tense-should-be-used-on-a-git-commit-message-121cb641134b
+    - https://www.danclarke.com/git-tense/
+    - https://www.quora.com/Which-tense-should-be-used-in-a-git-commit-message-past-present-and-why
+    - https://stackoverflow.com/questions/3580013/should-i-use-past-or-present-tense-in-git-commit-messages
+- on larger or open source projects sometimes we'll have paragraphs and bullets for the message
+    - `git config core.editor` to output what it is
+        - `code --wait` is the VS Code output
+            - the wait flag basically waiting for us to edit the text commit message in VS Code before it continues on, save, and close it
+    - so either get good at using VIM or just default to VS Code using links below in [The Git Docs](###the-git-docs)
+
+### A Lil' Extra Look at `git log`
+
+- if we got long commit messages they can clog the terminal/gui with lots of texts
+- `git log --online`
+    - shortrhand actually for `git log --pretty=oneline --abbrev-commit`
+    - shorter version of that commit hash to quick search
+    - the oneline shorthands each commit message to oneline with the hash
+        - e.g. `<commit hash> fix fizz in buzz` as the output
+
+## Amend Commits
+
+-   forgot to include a file or perhaps a typo or shitty commit message
+-   basically lets you "redo" the *previous* commit only, not some commit 10 updates ago
+-   in the forgot a file to previous commit case:
+    -   `git add missing-file.txt`
+    -   `git commit --amend` which opens your editor with the previous commit message
+        -   if you just save and close it will include whatever you staged with `git add`
+
+## Ignorin' Shit with `.gitignore`
+
+-   certain things you want not tracked ever by git
+    -   secrets, api keys, credentials
+    -   operating system files (looking at you `.DS_Store`)
+    -   log files
+    -   deps and packages
+-   just create a `.gitignore` file in the root of a repo
+    -   `folderName/`
+    -   `fileName.ext`
+    -   `*.log` glob patterns work
+-   (http://gitignore.io/)[http://gitignore.io/]
+
+### The Git Docs
+
+- [https://git-scm.com/docs](https://git-scm.com/docs)
+    - reference manual or book works
+- [Git Commit Docs](https://git-scm.com/docs/git-commit)
+- [Git Commands for Default Editor Setup](https://git-scm.com/book/en/v2/Appendix-C%3A-Git-Commands-Setup-and-Config)
