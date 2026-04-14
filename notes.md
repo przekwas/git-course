@@ -210,7 +210,7 @@ git config user.email
     - `git config core.editor` to output what it is
         - `code --wait` is the VS Code output
             - the wait flag basically waiting for us to edit the text commit message in VS Code before it continues on, save, and close it
-    - so either get good at using VIM or just default to VS Code using links below in [The Git Docs](###the-git-docs)
+    - so either get good at using VIM or just default to VS Code using links below in [The Git Docs](#the-git-docs)
 
 ### A Lil' Extra Look at `git log`
 
@@ -223,25 +223,25 @@ git config user.email
 
 ## Amend Commits
 
--   forgot to include a file or perhaps a typo or shitty commit message
--   basically lets you "redo" the *previous* commit only, not some commit 10 updates ago
--   in the forgot a file to previous commit case:
-    -   `git add missing-file.txt`
-    -   `git commit --amend` which opens your editor with the previous commit message
-        -   if you just save and close it will include whatever you staged with `git add`
+- forgot to include a file or perhaps a typo or shitty commit message
+- basically lets you "redo" the _previous_ commit only, not some commit 10 updates ago
+- in the forgot a file to previous commit case:
+    - `git add missing-file.txt`
+    - `git commit --amend` which opens your editor with the previous commit message
+        - if you just save and close it will include whatever you staged with `git add`
 
 ## Ignorin' Shit with `.gitignore`
 
--   certain things you want not tracked ever by git
-    -   secrets, api keys, credentials
-    -   operating system files (looking at you `.DS_Store`)
-    -   log files
-    -   deps and packages
--   just create a `.gitignore` file in the root of a repo
-    -   `folderName/`
-    -   `fileName.ext`
-    -   `*.log` glob patterns work
--   (http://gitignore.io/)[http://gitignore.io/]
+- certain things you want not tracked ever by git
+    - secrets, api keys, credentials
+    - operating system files (looking at you `.DS_Store`)
+    - log files
+    - deps and packages
+- just create a `.gitignore` file in the root of a repo
+    - `folderName/`
+    - `fileName.ext`
+    - `*.log` glob patterns work
+- (http://gitignore.io/)[http://gitignore.io/]
 
 ### The Git Docs
 
@@ -249,3 +249,82 @@ git config user.email
     - reference manual or book works
 - [Git Commit Docs](https://git-scm.com/docs/git-commit)
 - [Git Commands for Default Editor Setup](https://git-scm.com/book/en/v2/Appendix-C%3A-Git-Commands-Setup-and-Config)
+
+# Workin' with Branches
+
+## Introduction to Branches
+
+- each commit gets a hash (SHA1)
+- each commit references a parent commit that came before it
+- so on large projects we work in multiple contexts e.g. one person on overhauling layout, one on new feature, one on bug fix, and etc.
+    - if we only did linear commits this would never work and could break other folk's code
+    - this is what branches are for
+- branches are alternative timelines for projects
+    - what we do on one branch will not affect other branches
+        - until we merge :)
+- you always work on a branch even if you don't create any new contexts
+    - e.g. master or main
+    - the main branch as the "source of truth" like the official working codebase
+        - but it's a choice we get to make
+        - git don't really care which branch is your main/production codebase
+
+## What is the HEAD?
+
+- it's a pointer that refers to the current "location" in a repo
+- it points to a particular branch reference
+- if a branch is a bookmark in a book
+    - at any point in time we can only open the book to one bookmark
+    - think of HEAD as the current location or the place we're viewing or checking out a particular bookmark
+- the HEAD will default to the main/master branch's latest commit
+    - (tip is the last commit)
+- term originates on the "playhead" of an old analog tape deck
+
+## Branching Commands
+
+- `git branch` gives us a list of current branches in a repo
+    - `*` indicates which branch you're currently on
+    - type `q` to exit terminal stuffs lols
+- `git branch <branch-name>`
+    - makes a new branch based upon the current HEAD
+        - _important_ the current branch we're on affects the newly created branch
+    - just creates the branch, it does **not** switch you to that branch aka HEAD stays the same
+- `git switch <branch-name>`
+    - newer command, actually
+        - `git checkout` the old school way
+    - HEAD will now point to the tip of the branch you switched to
+- `git checkout <branch-name>`
+    - does the same as switch, but with a bunch of additional things
+        - can restore working tree files and such
+    - switch was added because it was a standalone simple command
+- `git switch -c <branch-name>` the shorthand to create and switch in oneline
+- `git branch -d <branch-name>` must be fully merged in its upstream branch before it will delete
+  - can't delete one you're checked out at
+  - can't delete it till it's fully merged but you can do the `-D` flag which is same as `-d --force` lol
+- `git branch -m <branch-name>` to rename a branch
+  - the `-m` flag is for "move" similar to the idea of how bash `mv` works for renaming something i guess
+  - to rename you have to be *on that branch* to rename it, again, how `mv` renaming works
+
+## Unstaged Changes and Branches
+
+-   example: do some changes on a tracked file on one branch but do not commit
+-   try to switch branches
+    -   error "Please commit your changes or stash them"
+-   example: do some changes on an untracked file in a new branch with no conflict
+-   try to switch branches
+    -   untracked/unstaged file **WILL COME WITH YOU** to the new branch omg
+-   **REMEMBER**
+    -   sometimes you'll have merge conflicts so you get an error on branch switches
+    -   sometimes it'll bring over unstaged new stuff on branch switches
+    -   GENERALLY commit or stash to avoid this biggity-bullshit
+-   **REMEMBER**
+
+### How Git Stores HEAD & Branches
+
+-   literally just files and folders references
+-   collections of bookmarks from that previous analogy
+-   inside of `.git` you can check the `HEAD` file
+    -   `cat HEAD` will tell you the `ref: refs/heads/<branch>` it's pointing to
+    -   the HEAD file just references a branch
+-   so like `refs/heads/master` is a file and is just a commit hash
+-   if `HEAD` points to a branch reference e.g. master, we get that `refs/heads/master`
+    -   and `refs/heads/master` is a file with a commit hash inside of it, and it's just the tip of that branch!
