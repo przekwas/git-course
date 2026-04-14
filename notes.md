@@ -241,7 +241,7 @@ git config user.email
     - `folderName/`
     - `fileName.ext`
     - `*.log` glob patterns work
-- (http://gitignore.io/)[http://gitignore.io/]
+- [http://gitignore.io/](http://gitignore.io/)
 
 ### The Git Docs
 
