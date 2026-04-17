@@ -298,33 +298,86 @@ git config user.email
     - switch was added because it was a standalone simple command
 - `git switch -c <branch-name>` the shorthand to create and switch in oneline
 - `git branch -d <branch-name>` must be fully merged in its upstream branch before it will delete
-  - can't delete one you're checked out at
-  - can't delete it till it's fully merged but you can do the `-D` flag which is same as `-d --force` lol
+    - can't delete one you're checked out at
+    - can't delete it till it's fully merged but you can do the `-D` flag which is same as `-d --force` lol
 - `git branch -m <branch-name>` to rename a branch
-  - the `-m` flag is for "move" similar to the idea of how bash `mv` works for renaming something i guess
-  - to rename you have to be *on that branch* to rename it, again, how `mv` renaming works
+    - the `-m` flag is for "move" similar to the idea of how bash `mv` works for renaming something i guess
+    - to rename you have to be _on that branch_ to rename it, again, how `mv` renaming works
+- `git branch -v` outputs some additional info, like the shorthand commit hash and the oneline commit message
+    - good way to see where HEAD is and what commit is the tip of that branch
 
 ## Unstaged Changes and Branches
 
--   example: do some changes on a tracked file on one branch but do not commit
--   try to switch branches
-    -   error "Please commit your changes or stash them"
--   example: do some changes on an untracked file in a new branch with no conflict
--   try to switch branches
-    -   untracked/unstaged file **WILL COME WITH YOU** to the new branch omg
--   **REMEMBER**
-    -   sometimes you'll have merge conflicts so you get an error on branch switches
-    -   sometimes it'll bring over unstaged new stuff on branch switches
-    -   GENERALLY commit or stash to avoid this biggity-bullshit
--   **REMEMBER**
+- example: do some changes on a tracked file on one branch but do not commit
+- try to switch branches
+    - error "Please commit your changes or stash them"
+- example: do some changes on an untracked file in a new branch with no conflict
+- try to switch branches
+    - untracked/unstaged file **WILL COME WITH YOU** to the new branch omg
+- **REMEMBER**
+    - sometimes you'll have merge conflicts so you get an error on branch switches
+    - sometimes it'll bring over unstaged new stuff on branch switches
+    - GENERALLY commit or stash to avoid this biggity-bullshit
+- **REMEMBER**
 
 ### How Git Stores HEAD & Branches
 
--   literally just files and folders references
--   collections of bookmarks from that previous analogy
--   inside of `.git` you can check the `HEAD` file
-    -   `cat HEAD` will tell you the `ref: refs/heads/<branch>` it's pointing to
-    -   the HEAD file just references a branch
--   so like `refs/heads/master` is a file and is just a commit hash
--   if `HEAD` points to a branch reference e.g. master, we get that `refs/heads/master`
-    -   and `refs/heads/master` is a file with a commit hash inside of it, and it's just the tip of that branch!
+- literally just files and folders references
+- collections of bookmarks from that previous analogy
+- inside of `.git` you can check the `HEAD` file
+    - `cat HEAD` will tell you the `ref: refs/heads/<branch>` it's pointing to
+    - the HEAD file just references a branch
+- so like `refs/heads/master` is a file and is just a commit hash
+- if `HEAD` points to a branch reference e.g. master, we get that `refs/heads/master`
+    - and `refs/heads/master` is a file with a commit hash inside of it, and it's just the tip of that branch!
+
+# Merging Branches
+
+## Introduction to Merging
+
+- incorporates one branch context into another
+    - we do this via `git merge` oh boy!
+    - you can also abandon a branch and not merge it
+- common workflow is to treat master/main as the "trunk" aka source of truth or stable working code
+    - add new feature on new branch
+    - and then merge feature into master when tested and ready
+- **two priciples** to remember:
+    - we merge branches, not specific commits
+    - we always merge to the current HEAD branch
+- two basic steps:
+    - switch to or checkout the branch you want to merge changes into (the receiving branch)
+    - use the `git merge` command to merge changes from a specific branch into the current branch
+- the simple merge with nothing else is a **fast forward** merge
+    - and it contains the commits and works from the merged branch
+    - the FF merge is just moving a branch pointer up to a new commit hash, that's basically it!
+
+### Merge Commits
+
+- let's say master gets a commit while we're on a bugfix branch
+    - now master is 1 commit ahead of where our merge occurred so we cannot just do a fast forward merge
+    - git can still resolve it for us _if_ there is no conflict :)
+- a merge commit generated for us by git that moves master ahead
+    - the first kind of commit that has **two** parents unlike a normal commit!!
+
+## Merge Conflicts
+
+- same as previous section example, but what if there's a conflict on lines of code?
+- the files where there are conflicts are decorated to indicate the conflict itself
+    - <<<<<<<<<<<<< HEAD
+        - content on the recipient branch that we're mering into
+    - =============
+    - \>>>>>>>>>>>>> branch-name
+        - this is from the branch we're trying to merge in
+- **resolving conflict tl;dr steps**
+    -   1. open the files with merge conflicts
+    -   2. edit the files to remove the conflicts, deciding which branch's content you want to keep in each conflict
+        - or keep content from both!
+    -   3. remove the conflict marker symbols
+    -   4. add your changes and make a commit
+-   vs code as your editor has some quick and nifty tools to help resolve conflicts, too
+
+### Practice
+
+-   create a ff merge
+-   create a merge with no conflict that generates a merge commit
+-   create a merge with conflict
