@@ -414,20 +414,54 @@ git config user.email
     - all changes in working directory that are _not_ staged for the next commit
         - compares staging (index) and the working directory
         - the differences are what we _could_ tell git that we have to add to the stating area
--   `git diff HEAD`
-    -   lists all changes in the working tree since your last commit
-    -   includes staged and unstaged changes
--   `git diff --staged` or `--cached` (same just an alias)
-    -   show me what will be included in my commit staging area
--   `git diff HEAD [filename]`
--   `git diff --staged [filename]`
-    -   both commands just allow us to diff specific files and not all if it's a ton of work on a big project
-    -   can separate files by spaces to get multiple e.g. `git diff --staged file1.txt file2.txt`
--   `git diff branch1..branch2`
-    -   diffs all files between branches, but we can narrow it down to specific files if we want
-    -   space or two dots works in the syntax e.g. `git diff branch1 branch2`
-    -   the order of the branches diff'ed DOES matter, so bear in mind the `+` and `-` markers for your a/b diff
--   `git diff commit1..commit2`
-    -   changes between 2 commits in history, can be any you want not just between HEAD and some commit are
-    -  you'll need the commit hash to do the comparison though so it can be tedious lol
+- `git diff HEAD`
+    - lists all changes in the working tree since your last commit
+    - includes staged and unstaged changes
+- `git diff --staged` or `--cached` (same just an alias)
+    - show me what will be included in my commit staging area
+- `git diff HEAD [filename]`
+- `git diff --staged [filename]`
+    - both commands just allow us to diff specific files and not all if it's a ton of work on a big project
+    - can separate files by spaces to get multiple e.g. `git diff --staged file1.txt file2.txt`
+- `git diff branch1..branch2`
+    - diffs all files between branches, but we can narrow it down to specific files if we want
+    - space or two dots works in the syntax e.g. `git diff branch1 branch2`
+    - the order of the branches diff'ed DOES matter, so bear in mind the `+` and `-` markers for your a/b diff
+- `git diff commit1..commit2`
+    - changes between 2 commits in history, can be any you want not just between HEAD and some commit are
+    - you'll need the commit hash to do the comparison though so it can be tedious lol
 
+# Ins and Outs of Stashing
+
+## Introduction to Stashing
+
+- if we have a bunch of work unstaged and uncomitted one one branch and we, for whatever reason, need to switch back to our main branch
+    - what happens? Either all our changes come with us to the destination branch
+        - or `git` won't let us switch if there are potential conflicts
+- it's not used by everyone, there's no situation where you _have_ to use it
+- basically it's a quality of life topic to know about
+- we can stash uncommited changes so that we can return to them later without having to make unecessary commits
+
+### Basics of Stash
+
+- `git stash`
+    - takes all uncommited changes (staged and unstaged) and stash them, reverting the changes in your working copy
+    - `git stash stave` also works
+- `git stash pop`
+    - **removes** the most recently stashed changes in your stash and re-apply them to your working copy
+- `git stash apply`
+    - apply whatever is stashed away, _without removing them from the stash_
+    - can be useful if you want to apply stashed changes to multiple branches!!!
+    - rarely used, though, lol
+- multiple stashes can be done as you work
+    - they add in order on top the current stash
+- `git stash list`
+    - can view what we have in our stash
+    - also provides a lil' stash id we can use to apply specific stashed changes
+- `git stash apply stash@{2}`
+    - git assumes you want to apply the most recent stash, but you can specify a particular stash using the id
+- `git stash drop stash@{2}`
+    - to delete a particular stash using the id
+    - if you use apply you may need to use this command
+- `git stash clear`
+    - clears the whole stash out
