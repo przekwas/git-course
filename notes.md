@@ -465,3 +465,102 @@ git config user.email
     - if you use apply you may need to use this command
 - `git stash clear`
     - clears the whole stash out
+
+# Undoing Changes & Time Traveling
+
+## Introduction Stuff
+
+- checkout out commits
+    - important to know
+- "escaping" detached HEAD
+    - important to know
+- discarding changes with checkout
+- `git restore`
+- `git reset`
+- `git revert`
+
+## Checking Out Old Commits
+
+- `git checkout`
+    - it's like a swiss army knife, because it's pretty overloaded which is why git switch and git restore were made
+- `git checkout <commit hash>`
+    - this let's us view a previous commit
+    - we see a message like `detached HEAD` state letting us know we traveled to see that commit and our history till then
+    - we time travel in commit history so a `git log` will only show the commits UP UNTIL THAT COMMIT HASH
+- usually a HEAD points to a branch reference
+    - it usually DOES NOT refer to a specific commit, normally a branch reference does
+    - so a detached HEAD makes it point to a specific commit!
+
+### Detached HEAD State
+
+- we can do a few things in this state
+    - stay in detached HEAD to examine the contents of the old commit, poke around, view files, and etc
+    - leave and go back to wherever you were before, aka reattach the HEAD
+    - create a new branch and switch to it
+        - we can now make and save changes since HEAD is no longer detached
+- if we have a detached head and we switch to a brainch e.g. `git switch main`
+    - this moves the HEAD back to the branch reference aka we reattached the HEAD
+
+## Reference Commits Relative to HEAD
+
+- we can checkout stuff for referencing previous commits relative to a partiular one
+- `git checkout HEAD~1`
+    - `HEAD~1` refers to a parent aka the commit before HEAD
+    - `HEAD~2` refers to a grandparent aka the 2nd commit before HEAD
+    - kinda' think about it as "HEAD - n" back "n" commits in history to checkout
+        - but commit hashes still work and can be easier or more specific if needed
+- other than switching back to our branch reference we can just do `git switch -`
+    - this takes us back to our last left off branch :)
+
+## Discard Changes
+
+### Git Checkout
+
+- `git checkout HEAD <file(s)>`
+    - if you make changes to a file but don't want to keep them, you can revert back to whatever it looked like when you last committed
+    - discard any changes in that file, reverting back to the HEAD
+- `git checkout -- <file(s)>`
+    - another shorthand way to do the same thing
+- remember `checkout` is the "old-school" command to do a lot of this but is considered overloaded hence the new command restore in the next section
+
+### Git Restore
+
+- brand new command that helps with undoing operations
+- worth knowing despite not being mentioned in a lot of tutorials
+- `git restore <file(s)>`
+    - restores back to the HEAD
+    - note: this command is not "undoable" so if you have uncommitted changes in the file, they will be lost!
+- `git restore --source HEAD~1 <file(s)>`
+    - restores the files to its state from a prior commit to HEAD
+    - you can use a commit hash as the source if you want
+- has another use other than un-modifying
+    - it can also un-stage changes
+- `git restore --staged <file(s)>`
+    - if you accidentally added a file to the staging area with `git add` and you _don't_ want to include it in the next commit, this removes it from staging
+
+## Undoing Commits with Git Reset
+
+- suppose we've made a couple commits on main branch, but we actually wanted to make them on a separate branch instead
+    - we can undo these commits with a reset!
+    - there's a regular reset and a hard reset
+- `git reset <commit-hash>`
+    - will reset the repo back to a sepcific commit
+    - the commits are gone
+    - this is the PLAIN RESET
+        - THE CHANGES ARE STILL IN THE WORKING DIRECTORY
+    - **we don't lose the changes, we just lose the commit history**
+        - we want to keep the work, but we just wanted it on a different brach
+- `git reset --hard <commit-hash>`
+    - the hard reset
+    - removes the commit history **and** the work/changes
+
+## Reverting Commits with Git Revert
+
+- similar to reset
+- `git reset` actually moves the branch pointer backwards eliminating commits
+- `git revert <commit-hash>` instead creates a brand new commit which reverses/undos the changes from a commit
+    - because it results in a new commit, you will be prompted to enter a new commit message
+-   if you need to reverse some commits that other people have on their machines, you should use revert
+    -   because reset nukes the history which could fuck with other people
+    -   you can use reset if you only have the bad commits on your local machine only before it is on other's
+-   sometimes revert can cause some merge conflicts that we'd have to do like we'd do regularly
