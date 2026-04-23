@@ -374,10 +374,60 @@ git config user.email
         - or keep content from both!
     -   3. remove the conflict marker symbols
     -   4. add your changes and make a commit
--   vs code as your editor has some quick and nifty tools to help resolve conflicts, too
+- vs code as your editor has some quick and nifty tools to help resolve conflicts, too
 
 ### Practice
 
--   create a ff merge
--   create a merge with no conflict that generates a merge commit
--   create a merge with conflict
+- create a ff merge
+- create a merge with no conflict that generates a merge commit
+- create a merge with conflict
+
+# Comparin' Changes with Git Diff
+
+## Introduction to Diffing
+
+- all about showing changes with git
+- a command to view changes between commits, branches, files, our working dir, and lots more
+- `git diff` can be overwhelming, but often used along with `git status` and `git log`
+    - purely informative command
+- `git diff`
+    - no additional options lists all the changes in our working dir that are **NOT** staged for the next commit
+
+### Guide to Reading Diffs
+
+- the output from the diff follows a similar pattern for every output
+- `diff --git a/file.example b/file.example`
+    - files that are being compared, usually the same aka old and new version
+        - could be different files if you diff it yourself
+- next line doesn't matter too much, but it's meta data about the files compared
+- `--- a/file.example`
+- `+++ b/file.example`
+    - just indicators for how changes will be marked
+- chunks, the diff only shows us a lil' context before and after and just our changes
+- chunk header `@@ -[set1 numbers] +[set2 numbers] @@`
+    - numbers are how many lines extracted and what part of a file they start from
+        - `-3,4` from file `a` 4 lines have been extracted starting from line 3
+
+### Different Ways to Use Diffs
+
+- `git diff`
+    - all changes in working directory that are _not_ staged for the next commit
+        - compares staging (index) and the working directory
+        - the differences are what we _could_ tell git that we have to add to the stating area
+-   `git diff HEAD`
+    -   lists all changes in the working tree since your last commit
+    -   includes staged and unstaged changes
+-   `git diff --staged` or `--cached` (same just an alias)
+    -   show me what will be included in my commit staging area
+-   `git diff HEAD [filename]`
+-   `git diff --staged [filename]`
+    -   both commands just allow us to diff specific files and not all if it's a ton of work on a big project
+    -   can separate files by spaces to get multiple e.g. `git diff --staged file1.txt file2.txt`
+-   `git diff branch1..branch2`
+    -   diffs all files between branches, but we can narrow it down to specific files if we want
+    -   space or two dots works in the syntax e.g. `git diff branch1 branch2`
+    -   the order of the branches diff'ed DOES matter, so bear in mind the `+` and `-` markers for your a/b diff
+-   `git diff commit1..commit2`
+    -   changes between 2 commits in history, can be any you want not just between HEAD and some commit are
+    -  you'll need the commit hash to do the comparison though so it can be tedious lol
+
