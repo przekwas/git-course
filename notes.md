@@ -544,7 +544,7 @@ git config user.email
     - we can undo these commits with a reset!
     - there's a regular reset and a hard reset
 - `git reset <commit-hash>`
-    - will reset the repo back to a sepcific commit
+    - will reset the repo back to a specific commit
     - the commits are gone
     - this is the PLAIN RESET
         - THE CHANGES ARE STILL IN THE WORKING DIRECTORY
