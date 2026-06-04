@@ -621,3 +621,62 @@ git config user.email
         - and then that allows us, on our local main branch, to simply write `git push` and it will push to the upstream branch on the remote for us
 - total sidenote, simply cloning a repo first means you now have a directory with all the baseline stuff set up and makes pushing work to your repo ready to go out of the box, basically
 
+# Fetching & Pulling
+
+- remote tracking branches, git fetch, and git pull
+    - pretty critical for collaborating with github
+
+## Remote Tracking Branches
+
+- cloning a github repo to our local machine
+    - all commits
+    - all files from repo
+    - a git repo
+    - and the main branch
+        - but it comes with **2** branch references, actually
+        - the regular branch reference that we can move around as we know how to do
+    - the other branch we get on a clone is the **remote tracking branch** e.g. `origin/main`
+        - it is a reference pointer to the state of the main branch on the remote
+            - it cannot be moved ourselves
+            - it's like a bookmark pointing to the last known commit on the main branch on origin
+- so we make some local commits the branch reference moves forward, as expected
+    - the remote tracking branch does not move, since remember it is just a bookmark/checkpoint that tells us the last known commit we have on the remote branch repo
+    -   you can checkout the remote branch pointers just like we know
+        -   `git checkout origin/main` (you can do `git branch -r` to see the remote branches)
+- suppose we just cloned a repo and it has multiple remote branches
+  - if we clone it gives us only the default branch, not all the other branches!!
+    - the local repo with `git branch -r` knows all the branches and their remote tracking branch bookmarks, but we don't have all of it in our workspace
+  - thanks to the new `git switch <branch-name>` command we just switch to a branch with the *exact same name* and if git detects we're making a local branch the same name as a tracked remote branch it assumes we **want them connected!**
+    - the oldschool way to do this: `git checkout --track <remote>/<branch>`
+      - e.g. `git checkout --track origin/puppies` is the same idea as `git switch puppies`
+
+## Fetching Basics
+
+-   fetching allows us to download changes from a remote repo, BUT those changes will not be automatically integrated into our working files
+    -   it lets us see what other have been working on without having to merge those changes into your local repo
+    -   "go see the latest into from github, but don't screw up my local work"
+-   hypothetical: a local repo and a corresponding github repo that we cloned down basically
+    -   local does some more work e.g. a commit and in the meantime a collaborator added new commits to the github repo and the main branch in our case
+        -   we don't have the new changes in the main branch but we do have our 1 local one ... so what do we do?
+-   workspace > git add > staging (index) > git commit > adds to local repo (.git dir) > git push > remote repo
+    -   git fetch and git pull work similarly but in the other direction
+    -   starting with fetch
+        -   `git fetch <remote>` takes remote changes from a github repo and brings them down into our local repository (.git dir) but **not** into our actual workspace
+            -   defaults to origin if no remote is specified
+            -   can also specifcy a specific branch name too `git fetch <remote> <branch>`
+-   the fetch command fetches branches and history from a specific remote repo, and it only updates remote tracking branches
+    -   `git fetch origin` would fetch all changes from the origin remote repo
+-   it is also used for fetching new branches that are created and added to the remote repo
+
+## Pulling Basics
+
+- git pull is the other command we can use to retreive changes from a remote repo
+  - unlike fetch it will actually update our HEAD branch with whatever changes are gotten from the remote
+    - "go download data from github AND immediately update my local repo with those changes"
+  - think of it as a git pull = git fetch + git merge
+- `git pull <remote> <branch>`
+  - where we run it from, matters, e.g. it merges on our current branch locally so careful WHERE you run it
+  - and since it merges you get to deal with merge conflicts lol
+  - and the super shorthand of `git pull` works just as well cause typically we're on the branch we want to pull changes on anyway from the remote
+    - so it will default to the origin remote, which is super common
+    - and it will default to the remote tracking branch that is configured to our local branch
