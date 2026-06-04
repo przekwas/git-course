@@ -560,7 +560,64 @@ git config user.email
 - `git reset` actually moves the branch pointer backwards eliminating commits
 - `git revert <commit-hash>` instead creates a brand new commit which reverses/undos the changes from a commit
     - because it results in a new commit, you will be prompted to enter a new commit message
--   if you need to reverse some commits that other people have on their machines, you should use revert
-    -   because reset nukes the history which could fuck with other people
-    -   you can use reset if you only have the bad commits on your local machine only before it is on other's
--   sometimes revert can cause some merge conflicts that we'd have to do like we'd do regularly
+- if you need to reverse some commits that other people have on their machines, you should use revert
+    - because reset nukes the history which could fuck with other people
+    - you can use reset if you only have the bad commits on your local machine only before it is on other's
+- sometimes revert can cause some merge conflicts that we'd have to do like we'd do regularly
+
+# GitHub
+
+## What does GitHub do for us?
+
+- hosting platform for git repos
+- acess them anywhere and share them with anyone to collab
+- has a bunch of additional features beyond git repos as well
+- GitLab, BitBucket, and Gerrit are other options
+    - sadly GitHub obliterated the competition and they will rat fuck us with enshitification and LLM SLOP imo
+
+## Cloning GitHub Repos with Git Clone
+
+- gets a repo not on our machine and brings it to our machine
+- `git clone <url>`
+    - goes and retrieves all files associated with the repo and copy them to our local machine
+    - also will initialize a new repo on our machine, giving us access to the full git history of the cloned project
+    - don't do this inside of another repo lol
+- there are some flag options but remember it's not tied to github at all so you can clone any hosted repo you want
+
+## Creating a GitHub Repo
+
+- option 1: existing repo
+    - create new repo on github
+    - connect your local repo (add a remote)
+    - push up your changes to github
+- option 2: start from scratch
+    - create a new repo on github
+    - clone it down to your machine
+    - do some work locally
+    - push up your changes from github
+
+## Remote
+
+- a `remote` is just a fancy name for a destination url with a label, basically
+    - `git remote -v`
+        - this lists all remotes in a repo
+        - _origin_ is the common name for a url, but it's a common standard, no special powers or anything lol
+    - `git remote add <name> <url>`
+    - `git remote rename <old> <new>`
+    - `git remote remove <name>`
+
+## Pushing
+
+- like the name implies, just push up some work to github!
+- `git push <remote> <branch>`
+    - specify the remote we want to push up to
+    - and the specific local branch we want to push up to that remote
+- `git push <remote> <local-branch>:<remote-branch>`
+    - while we typically want to push a local branch up to a remote branch of the same name, we don't have to
+    - this command pushes a local branch up to a remote branch that's not the same name
+- the `-u` option flag allows us to set an upstream
+    - think of upstreams as a link connecting our local branch to a branch on github
+    - this means running `git push -u origin main` sets the upstream of the local main branch to the remote main branch
+        - and then that allows us, on our local main branch, to simply write `git push` and it will push to the upstream branch on the remote for us
+- total sidenote, simply cloning a repo first means you now have a directory with all the baseline stuff set up and makes pushing work to your repo ready to go out of the box, basically
+
