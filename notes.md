@@ -641,42 +641,73 @@ git config user.email
             - it's like a bookmark pointing to the last known commit on the main branch on origin
 - so we make some local commits the branch reference moves forward, as expected
     - the remote tracking branch does not move, since remember it is just a bookmark/checkpoint that tells us the last known commit we have on the remote branch repo
-    -   you can checkout the remote branch pointers just like we know
-        -   `git checkout origin/main` (you can do `git branch -r` to see the remote branches)
+    - you can checkout the remote branch pointers just like we know
+        - `git checkout origin/main` (you can do `git branch -r` to see the remote branches)
 - suppose we just cloned a repo and it has multiple remote branches
-  - if we clone it gives us only the default branch, not all the other branches!!
-    - the local repo with `git branch -r` knows all the branches and their remote tracking branch bookmarks, but we don't have all of it in our workspace
-  - thanks to the new `git switch <branch-name>` command we just switch to a branch with the *exact same name* and if git detects we're making a local branch the same name as a tracked remote branch it assumes we **want them connected!**
-    - the oldschool way to do this: `git checkout --track <remote>/<branch>`
-      - e.g. `git checkout --track origin/puppies` is the same idea as `git switch puppies`
+    - if we clone it gives us only the default branch, not all the other branches!!
+        - the local repo with `git branch -r` knows all the branches and their remote tracking branch bookmarks, but we don't have all of it in our workspace
+    - thanks to the new `git switch <branch-name>` command we just switch to a branch with the _exact same name_ and if git detects we're making a local branch the same name as a tracked remote branch it assumes we **want them connected!**
+        - the oldschool way to do this: `git checkout --track <remote>/<branch>`
+            - e.g. `git checkout --track origin/puppies` is the same idea as `git switch puppies`
 
 ## Fetching Basics
 
--   fetching allows us to download changes from a remote repo, BUT those changes will not be automatically integrated into our working files
-    -   it lets us see what other have been working on without having to merge those changes into your local repo
-    -   "go see the latest into from github, but don't screw up my local work"
--   hypothetical: a local repo and a corresponding github repo that we cloned down basically
-    -   local does some more work e.g. a commit and in the meantime a collaborator added new commits to the github repo and the main branch in our case
-        -   we don't have the new changes in the main branch but we do have our 1 local one ... so what do we do?
--   workspace > git add > staging (index) > git commit > adds to local repo (.git dir) > git push > remote repo
-    -   git fetch and git pull work similarly but in the other direction
-    -   starting with fetch
-        -   `git fetch <remote>` takes remote changes from a github repo and brings them down into our local repository (.git dir) but **not** into our actual workspace
-            -   defaults to origin if no remote is specified
-            -   can also specifcy a specific branch name too `git fetch <remote> <branch>`
--   the fetch command fetches branches and history from a specific remote repo, and it only updates remote tracking branches
-    -   `git fetch origin` would fetch all changes from the origin remote repo
--   it is also used for fetching new branches that are created and added to the remote repo
+- fetching allows us to download changes from a remote repo, BUT those changes will not be automatically integrated into our working files
+    - it lets us see what other have been working on without having to merge those changes into your local repo
+    - "go see the latest into from github, but don't screw up my local work"
+- hypothetical: a local repo and a corresponding github repo that we cloned down basically
+    - local does some more work e.g. a commit and in the meantime a collaborator added new commits to the github repo and the main branch in our case
+        - we don't have the new changes in the main branch but we do have our 1 local one ... so what do we do?
+- workspace > git add > staging (index) > git commit > adds to local repo (.git dir) > git push > remote repo
+    - git fetch and git pull work similarly but in the other direction
+    - starting with fetch
+        - `git fetch <remote>` takes remote changes from a github repo and brings them down into our local repository (.git dir) but **not** into our actual workspace
+            - defaults to origin if no remote is specified
+            - can also specifcy a specific branch name too `git fetch <remote> <branch>`
+- the fetch command fetches branches and history from a specific remote repo, and it only updates remote tracking branches
+    - `git fetch origin` would fetch all changes from the origin remote repo
+- it is also used for fetching new branches that are created and added to the remote repo
 
 ## Pulling Basics
 
 - git pull is the other command we can use to retreive changes from a remote repo
-  - unlike fetch it will actually update our HEAD branch with whatever changes are gotten from the remote
-    - "go download data from github AND immediately update my local repo with those changes"
-  - think of it as a git pull = git fetch + git merge
+    - unlike fetch it will actually update our HEAD branch with whatever changes are gotten from the remote
+        - "go download data from github AND immediately update my local repo with those changes"
+    - think of it as a git pull = git fetch + git merge
 - `git pull <remote> <branch>`
-  - where we run it from, matters, e.g. it merges on our current branch locally so careful WHERE you run it
-  - and since it merges you get to deal with merge conflicts lol
-  - and the super shorthand of `git pull` works just as well cause typically we're on the branch we want to pull changes on anyway from the remote
-    - so it will default to the origin remote, which is super common
-    - and it will default to the remote tracking branch that is configured to our local branch
+    - where we run it from, matters, e.g. it merges on our current branch locally so careful WHERE you run it
+    - and since it merges you get to deal with merge conflicts lol
+    - and the super shorthand of `git pull` works just as well cause typically we're on the branch we want to pull changes on anyway from the remote
+        - so it will default to the origin remote, which is super common
+        - and it will default to the remote tracking branch that is configured to our local branch
+
+# GitHub Random Odds & Ends
+
+## Public vs. Private Repos
+
+- public is accessible to everyone on the internet
+    - anyone can see, clone, and etc the repo on github
+- private is only accessible to the owner, and anyone we've explicitly granted access
+    - a lil' different for organization or enterprise repos, though
+
+## Collaborators
+
+- allows other users to push changes to the repo
+- workflows will be covered more in-depth a little later, but let's take a look at the basics
+    - one user starts and invites a collaborator
+    - they then add some work to the remote repo from local
+    - the collab person is now behind but can see the chanes on the remote
+        - they would clone the repo and they're good to go if they're just starting out as a collab
+        - otherwise do some work and commit it locally and the push it to the remote repo
+    - and finally the other person would then need to get those changes that the collab person added
+        - go ahead and pull down if you know its probably safe to do so
+
+## README's
+
+- pretty much a file used to communicate important info about a repo
+    - what it do
+    - how to run
+    - why it's noteworthy
+    - who maintains
+- written in markdown most commonly
+- if placed in the root of the project `README.md` then github will automatically displayed for us by default on the repo for others to see
