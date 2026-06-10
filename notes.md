@@ -713,3 +713,5 @@ git config user.email
 - if placed in the root of the project `README.md` then github will automatically displayed for us by default on the repo for others to see
 
 ## Next
+
+## Next
