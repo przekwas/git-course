@@ -25,7 +25,7 @@
 
 ## Who uses Git?
 
-- engineers, devs, coders, and such
+mionetto na aperitivo- engineers, devs, coders, and such
 - tech-adjacent roles, like folks who work with devs or dev teams
 - governments
     - used in drafting of laws
@@ -711,6 +711,8 @@ git config user.email
     - who maintains
 - written in markdown most commonly
 - if placed in the root of the project `README.md` then github will automatically displayed for us by default on the repo for others to see
+
+## Next
 
 ## Next
 
